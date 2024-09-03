@@ -3,10 +3,12 @@ import SwiftUI
 import SwiftUI
 
 struct MovieCard: View {
+    @ObservedObject var movies_Data : MoviesViewModel
     var movieImage : URL?
     var title: String
     var description: String
     var rating: Double
+    @Binding var count : Int
 
     var body: some View {
         ZStack {
@@ -56,6 +58,14 @@ struct MovieCard: View {
         }
         .frame(width: 170 , height: 230)
         .cornerRadius(12)
+        .onAppear(perform: {
+            // to get start from 1
+            count = count + 1
+            Task{
+                await movies_Data.loadMoreData()
+            }
+        })
+        
     }
 }
 
@@ -71,9 +81,10 @@ struct MovieCard: View {
 
 #Preview {
     MovieCard(
+        movies_Data : MoviesViewModel(),
         movieImage: URL(string: "https://picsum.photos/300"),
         title: "Inception",
         description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
-        rating: 4.5
+        rating: 4.5, count: Binding.constant(0)
     )
 }

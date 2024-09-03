@@ -11,7 +11,6 @@ struct LocalSearchView: View {
     @State var searchValue : String = ""
     var body: some View {
         SearchField(placeholderText: "Search Movie", searchText: $searchValue)
-      //  Spacer()
         
     }
 }

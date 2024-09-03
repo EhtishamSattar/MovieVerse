@@ -9,7 +9,7 @@ import Foundation
 
 struct Movie : Codable , Hashable {
     var adult : Bool
-    var backdrop_path : String
+    var backdrop_path : String?
     var genre_ids : [Int]
     var id : Int
     var original_language : String

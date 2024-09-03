@@ -15,7 +15,7 @@ struct SearchField: View {
         RoundedRectangle(cornerRadius: 30)
             .fill(Color("SearchBarColor"))
             .frame(maxWidth: .infinity)
-            .frame(height: 60)
+            .frame(height: 50)
             .shadow(radius: 5)
         // used prompt to give the textfield's text a color
             .overlay(
