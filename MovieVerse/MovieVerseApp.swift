@@ -10,7 +10,9 @@ import SwiftUI
 @main
 struct MovieVerseApp: App {
     let persistenceController = PersistenceController.shared
+    let coreDataStack = CoreDataStack.shared
     @StateObject var moviesData : MoviesViewModel = MoviesViewModel()
+    @StateObject private var movieManager = MovieManager()
     
     init() {
         let appearance = UITabBarAppearance()
@@ -23,28 +25,39 @@ struct MovieVerseApp: App {
     
     var body: some Scene {
         WindowGroup {
-            TabView {
-                HomeView(movies_Data: moviesData)
-                    .tabItem {
-                        Label("Home", systemImage: "house")
-                    }
-                    .background(Color("BackgroundColor"))
-                
-                LocalSearchView()
-                    .tabItem {
-                        Label("Search", systemImage: "magnifyingglass")
-                    }
-                    .background(Color("BackgroundColor"))
-                
-                RecentlyViewedView()
-                    .tabItem {
-                        Label("Recently Viewed", systemImage: "clock.arrow.circlepath")
-                    }
-                    .background(Color("BackgroundColor"))
+            NavigationView{
                 
                 
+                TabView {
+                    HomeView(movies_Data: moviesData)
+                        .tabItem {
+                            Label("Home", systemImage: "house")
+                                .foregroundColor(.white)
+                        }
+                        .background(Color("BackgroundColor"))
+                        .environmentObject(movieManager)
+                    
+                    LocalSearchView(movies_Data: moviesData)
+                        .tabItem {
+                            Label("Search", systemImage: "magnifyingglass")
+                                .foregroundColor(.white)
+                        }
+                        .background(Color("BackgroundColor"))
+                        //.environmentObject(movieManager)
+                    
+                    RecentlyViewedView(movies_Data: moviesData/*, movieManager: movieManager*/)
+                        .tabItem {
+                            Label("Recently Viewed", systemImage: "clock.arrow.circlepath")
+                                .foregroundColor(.white)
+                        }
+                        .background(Color("BackgroundColor"))
+                    
+                    
+                }
             }
         }
+        .environment(\.managedObjectContext, persistenceController.container.viewContext)
+        //.environmentObject(movieDb)
         //            ContentView()
         //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
     }

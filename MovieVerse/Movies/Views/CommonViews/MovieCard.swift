@@ -60,6 +60,9 @@ struct MovieCard: View {
         .cornerRadius(12)
         .onAppear(perform: {
             // to get start from 1
+            
+            // this count is the binded published variable of MovieViewModel class
+            // to count the results appeared via MovieCard
             count = count + 1
             Task{
                 await movies_Data.loadMoreData()

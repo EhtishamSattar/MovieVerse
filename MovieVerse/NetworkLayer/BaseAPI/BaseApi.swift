@@ -20,14 +20,22 @@ class BaseApi {
         api_Url = api_Url + "&page=\(pageNumber)"
         
         if let api_Url = URL(string: api_Url) {
+            
+                let decoder = JSONDecoder()
+//                guard let contextKey = CodingUserInfoKey.context else {
+//                    fatalError("Failed to retrieve context key.")
+//                }
+//                decoder.userInfo[contextKey] =  PersistenceController.shared.container.viewContext
+            
             let (data, error) = try await URLSession.shared.data(from: api_Url)
             print(error)
-            let moviesData = try JSONDecoder().decode(MoviesData.self, from: data)
+            let moviesData = try decoder.decode(MoviesData.self, from: data)
             return moviesData
         }
         return nil
     }
     
+    // take movie name as parameter and , default parameter pageNumber
     func getSearhedMovieData(name : String, _ pageNumber : Int = 1) async throws -> MoviesData? {
         searchApi_Url = searchApi_Url + "&query=\(name)&page=\(pageNumber)"
         
@@ -39,4 +47,5 @@ class BaseApi {
         }
         return nil
     }
+    
 }

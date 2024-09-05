@@ -9,6 +9,8 @@ import SwiftUI
 
 
 struct NoMovieFoundView: View {
+    var message : String
+    var subMessage : String
     var body: some View {
         VStack(alignment: .center,spacing: 20) {
             Image(systemName: "film")
@@ -16,11 +18,11 @@ struct NoMovieFoundView: View {
                 .scaledToFit()
                 .frame(width: 100, height: 100)
             
-            Text("No Movie Found")
+            Text("\(message)")
                 .font(.title)
                 .fontWeight(.semibold)
             
-            Text("Try searching for another movie.")
+            Text("\(subMessage)")
                 .font(.body)
         }
         .padding()
@@ -31,6 +33,6 @@ struct NoMovieFoundView: View {
 }
 
 #Preview {
-    NoMovieFoundView()
+    NoMovieFoundView(message: "No Movie Found", subMessage: "Try Searching for Another Movie")
 }
 

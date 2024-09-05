@@ -32,7 +32,7 @@ struct HomeView: View {
                 Spacer()
                 
                 if movies_Data.movies.isEmpty {
-                    NoMovieFoundView()
+                    NoMovieFoundView(message: "No Movie Found", subMessage: "Check you Internet Connection")
                     Spacer()
                 }else {
                     ScrollView(showsIndicators: false){
@@ -60,9 +60,9 @@ struct HomeView: View {
                                     ForEach(Array(movies_Data.movies.enumerated()) , id: \.offset) {index,movie in
                                         
                                         NavigationLink {
-                                            MovieDetailsView(movies_Data: movies_Data ,movie: movie)
+                                            MovieDetailsView(movies_Data: movies_Data, movie: movie)
                                         } label: {
-                                            MovieCard(movies_Data: movies_Data,movieImage : movies_Data.getPosterImageURL(path: movie.poster_path) ?? nil ,title: movie.title, description: movie.overview, rating: movie.vote_average, count: $movies_Data.count)
+                                            MovieCard(movies_Data: movies_Data,movieImage : movies_Data.getPosterImageURL(path: movie.poster_path ?? "") ?? nil ,title: movie.title ?? "none", description: movie.overview ?? "none", rating: movie.vote_average, count: $movies_Data.count)
                                         }
 
                                         
