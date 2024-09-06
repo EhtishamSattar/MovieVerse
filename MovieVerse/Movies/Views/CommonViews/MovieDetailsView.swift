@@ -118,53 +118,95 @@ struct MovieDetailsView: View {
     @ObservedObject var movies_Data : MoviesViewModel
     var movie : MovieItem?
     @EnvironmentObject var movieManager: MovieManager
+    @Environment(\.presentationMode) var mode
     
     var body: some View {
+        
         VStack(alignment: .leading) {
+            
             if let movie = movie {
                 if let path = movie.backdrop_path {
-                    AsyncImage(url: movies_Data.getBackdropPath(path: path )) { image in
-                        image
-                            .resizable()
-                            .scaledToFit()
-                            //.aspectRatio(contentMode: .fill)
-                            .frame(height: 250)
-                            .cornerRadius(10)
-                    } placeholder: {
-                        ProgressView()
+                    ZStack(alignment: .topLeading) {
+        
+                        AsyncImage(url: movies_Data.getBackdropPath(path: path)) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 400, height: 350)
+                                .cornerRadius(10)
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        
+                        Button(action: {
+                            mode.wrappedValue.dismiss()
+                        }) {
+                            Image(systemName: "chevron.backward")
+                                .foregroundColor(.white)
+                                .padding(10)
+                                .font(Font.headline.bold())
+                        }
+                        .padding(.top, 70)
+                        .padding(.leading, 10)
                     }
+                    .frame(width: 400, height: 350)
+
+                    
                 }else{
                     ProgressView()
                 }
                 HStack(spacing: 0) {
-                    
-                    AsyncImage(url: movies_Data.getBackdropPath(path: movie.poster_path )) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: 150, maxHeight: .infinity)
-                            .cornerRadius(20)
-                        
-                    } placeholder: {
+                    if let path = movie.poster_path{
+                        AsyncImage(url: movies_Data.getPosterImageURL(path: path )) { image in
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .frame(maxWidth: 130, maxHeight: .infinity)
+                                .cornerRadius(30)
+                                
+                            
+                        } placeholder: {
+                            ProgressView()
+                                .foregroundColor(.white)
+                                .padding()
+                        }
+                    }else {
                         ProgressView()
+                            .foregroundColor(.white)
+                            .padding()
                     }
                     
+                    
+//                    VStack {
+//                        Spacer() // Push the text to the bottom
+//                        Text(movie.title ?? "none")
+//                            .font(.title)
+//                            .font(Font.headline.weight(.bold))
+//                            .frame(maxWidth: .infinity) // Adjust as needed
+//                            .minimumScaleFactor(0.3)
+//                            .padding(.leading, -10)
+//                            .padding(.vertical, 5)
+//                        
+//                    }
+//                    .frame(maxWidth: .infinity, alignment: .leading)
                     VStack {
                         Spacer() // Push the text to the bottom
-                        Text(movie.original_title ?? "none")
+                        Text(movie.title ?? "none")
                             .font(.title)
-                            .font(Font.headline.weight(.bold))
-                            .foregroundColor(.white)
+                            .fontWeight(.bold) // Combines font and weight for simplicity
+                            .frame(maxWidth: .infinity, alignment: .leading) // Aligns the text to the leading edge
+                            .lineLimit(2) // Adjusts to show text in 2 lines max, change as needed
+                            .minimumScaleFactor(0.7) // Scales down to half its size if needed
+                            //.padding(.leading, -5)
                             .padding(.horizontal, 10)
-                            .padding(.bottom, 0)
-                        
+                            .padding(.vertical, 5)
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: 200)
                 .padding(.top, -120)
-                .padding(.horizontal, 7)
+                .padding(.horizontal, 20)
                 
                 
                 
@@ -179,12 +221,12 @@ struct MovieDetailsView: View {
                         .font(.subheadline)
                         .foregroundColor(.gray)
                     Spacer()
-                    Label("\(movie.adult ? "Adult Movie" : "General Audience")", systemImage: "person.fill")
+                    Label("\(movie.adult ? "Adult" : "General")", systemImage: "person.fill")
                         .font(.subheadline)
                         .foregroundColor(movie.adult ? .red : .green)
                     
                 }
-                .padding()
+                .padding(.horizontal, 40)
                 
                 VStack(alignment: .leading) {
                     Text("About Movie")
@@ -194,7 +236,7 @@ struct MovieDetailsView: View {
                         Text("Type:")
                             .foregroundColor(Color.white).opacity(0.8)
                         
-                        Text("\(movie.adult ? "Adult Movie" : "General Audience")")
+                        Text("\(movie.adult ? "Adult" : "General")")
                             .font(.subheadline)
                             .italic()
                             .foregroundColor(movie.adult ? .red : .green)
@@ -202,24 +244,30 @@ struct MovieDetailsView: View {
                     
                     Text(movie.overview ?? "None")
                         .font(.body)
+                        .lineLimit(6)
                 }
-                .padding()
+                .padding(.horizontal, 20)
+                .padding(.top, 10)
                 
                 Spacer()
             }
             
         }
+        .frame(maxWidth: .infinity,maxHeight: .infinity)
+        .navigationBarBackButtonHidden(true)
         .foregroundColor(Color.white)
         .background(Color("BackgroundColor"))
-        .navigationBarTitleDisplayMode(.inline)
+        //.navigationTitle(movie?.title ?? "Movie Detail")
+        //.navigationBarTitleDisplayMode(.inline)
         .onAppear {
             //            let newMovie = Movie(id: Int32(Date().timeIntervalSince1970), title: movieTitle)
             //                            movieManager.createData(movie: newMovie)
             //if let movie = movie {
             if let movie = movie {
-                            movieManager.createData(movie: movie)
-                        }
+                movieManager.createData(movie: movie)
+            }
         }
+        .ignoresSafeArea()
         //        .navigationBarItems(
         //            trailing: Button(action: {
         //

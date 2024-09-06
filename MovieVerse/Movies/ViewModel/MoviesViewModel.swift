@@ -52,7 +52,7 @@ class MoviesViewModel : ObservableObject {
     }
 
     func getPosterImageURL(path: String) -> URL? {
-        return Constants.getImageURL(path: path, typeImage: .backDropImage)
+        return Constants.getImageURL(path: path, typeImage: .posterImage)
     }
     
     func getBackdropPath(path: String? ) -> URL? {

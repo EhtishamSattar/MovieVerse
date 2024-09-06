@@ -21,7 +21,7 @@ struct LSMovieCard: View {
                             .resizable()
                             .scaledToFill()
                             .frame(maxWidth: 150, maxHeight: 170)
-                            .cornerRadius(10)
+                            .cornerRadius(20)
                         
                     } placeholder: {
                         ProgressView()
@@ -30,43 +30,42 @@ struct LSMovieCard: View {
                     }
                 }else {
                     ProgressView()
+                        .foregroundColor(Color.white)
+                        .padding()
                 }
                 
                 
                 VStack(alignment: .leading) {
                     if let title = movie.original_title {
                         Text(title)
-                            .font(.headline)
-                            .font(Font.headline.weight(.heavy))
+                            .font(.title2)
+                            .font(Font.headline.weight(.bold))
                     }
                     Spacer()
-                    HStack{
-                        Text("Type: ")
-                        Spacer()
-                        Text("\(movie.adult ? "Adult" : "General")")
-                            .italic()
-                            .foregroundColor(movie.adult ? .red : .green)
-                    }
-                    .font(.caption)
                     
-                    HStack{
-                        Text("Rating")
-                        Spacer()
-                        Text("\(Int(movie.vote_average))")
-                    }
-                    .font(.caption)
+                    Label("\(movie.adult ? "Adult" : "General")", systemImage: "person.fill")
+                        .font(.subheadline)
+                        .foregroundColor(movie.adult ? .red : .green)
+                        .accentColor(.white)
                     
-                    Text("\(String(describing: movie.release_date ?? "n/a"))")
                     
-                    HStack{
-                        Text("Total Votes")
-                        Spacer()
-                        Text("\(Int(movie.vote_count))")
-                    }
-                    .font(.caption)
+                    Label("\(Int(movie.vote_average))", systemImage: "doc.fill")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    
+                    Label("\(movie.release_date ?? "None")", systemImage: "calendar")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .accentColor(.white)
+                   
+                    
+                    Label("\(movie.vote_count)", systemImage: "bookmark")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                        .accentColor(.white)
                     
                 }
-                .padding(.horizontal, 10)
+                //.padding(.horizontal, 10)
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity)
                 

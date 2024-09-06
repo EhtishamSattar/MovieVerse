@@ -22,60 +22,77 @@ struct HomeView: View {
     var body: some View {
         NavigationView{
             VStack{
-                SearchField(placeholderText: "Search Movie", searchText: $movies_Data.searchValue)
-                    .onChange(of: movies_Data.debouncedSearchValue) {newValue in
+                //                SearchField(placeholderText: "Search Movie", searchText: $movies_Data.searchValue)
+                //                    .onChange(of: movies_Data.debouncedSearchValue) {newValue in
+                //                        print(newValue)
+                //                        Task{
+                //                            await movies_Data.getSearchMovieData(movieName: newValue)
+                //                        }
+                //                    }
+                
+                SearchField(placeholderText: "Search from Recently Viewed", searchText: $movies_Data.localSearchValue)
+                    .onChange(of: movies_Data.debouncedLocalSearchValue){ newValue in
                         print(newValue)
-                        Task{
-                            await movies_Data.getSearchMovieData(movieName: newValue)
-                        }
-                    }
+                        // will change this method
+                        movies_Data.getSearchedMoviesFromRecentlyViewed(movieName: newValue)                }
                 Spacer()
                 
                 if movies_Data.movies.isEmpty {
                     NoMovieFoundView(message: "No Movie Found", subMessage: "Check you Internet Connection")
                     Spacer()
                 }else {
-                    ScrollView(showsIndicators: false){
+                    
+                    ScrollView(.vertical, showsIndicators: false) {
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack {
+                                ForEach(Array(movies_Data.movies.enumerated()), id: \.offset) { index, movie in
+                                    MovieCardScrollable(movies_Data: movies_Data, index: index, movie: movie)
+                                }
+                            }
+                            .padding(30)
+                            .background(Color("BackgroundColor"))
+                            .frame(maxHeight: 400)
+                            
+                        }
+                        .padding(.vertical, 15)
+                        .frame(maxWidth: .infinity, maxHeight: 720)
+                        
+                        
                         LazyVGrid(
                             columns: columns,
                             alignment: .center,
                             spacing: 10,
-                            pinnedViews: [.sectionHeaders],
-                            content: {
-                                Section(header: ZStack {
-                                    Text("Movies")
-                                        .padding()
-                                        .frame(maxWidth: .infinity ,alignment: .leading)
-                                        .foregroundColor(.white)
-                                        .background(Color("BackgroundColor"))
-                                        .font(Font.headline.weight(.bold))
-                                        .font(.largeTitle)
-                                }
-                                        
-                                ) {
-                                    //                            Array(...): The ForEach loop in SwiftUI requires the data to conform to RandomAccessCollection, so we wrap the enumerated sequence with Array(...) to satisfy this requirement.
-                                    //                            id: \.offset: We use the offset (the index returned by enumerated()) as the unique identifier for each item in the loop. This is needed for SwiftUI to differentiate between views.
-                                    
-                                    
-                                    ForEach(Array(movies_Data.movies.enumerated()) , id: \.offset) {index,movie in
-                                        
-                                        NavigationLink {
-                                            MovieDetailsView(movies_Data: movies_Data, movie: movie)
-                                        } label: {
-                                            MovieCard(movies_Data: movies_Data,movieImage : movies_Data.getPosterImageURL(path: movie.poster_path ?? "") ?? nil ,title: movie.title ?? "none", description: movie.overview ?? "none", rating: movie.vote_average, count: $movies_Data.count)
-                                        }
-
-                                        
+                            pinnedViews: [.sectionHeaders]
+                        ) {
+                            Section(header: ZStack {
+                                Text("Movies")
+                                    .padding()
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .foregroundColor(.white)
+                                    .background(Color("BackgroundColor"))
+                                    .font(.headline.weight(.bold))
+                                    .font(.largeTitle)
+                            }) {
+                                ForEach(Array(movies_Data.movies.enumerated()), id: \.offset) { index, movie in
+                                    NavigationLink(destination: MovieDetailsView(movies_Data: movies_Data, movie: movie)) {
+                                        MovieCard(
+                                            movies_Data: movies_Data,
+                                            movieImage: movies_Data.getBackdropPath(path: movie.poster_path ?? ""),
+                                            title: movie.title ?? "none",
+                                            description: movie.overview ?? "none",
+                                            rating: movie.vote_average,
+                                            count: $movies_Data.count
+                                        )
                                     }
-                                    
-                                    
                                 }
-                                
-                            })
+                            }
+                        }
+                        
+                        .frame(maxHeight: .infinity)
                     }
+                    
                 }
-                
-                
                 
             }
             .padding(.horizontal)

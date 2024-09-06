@@ -21,28 +21,28 @@ struct MovieCard: View {
             
             }, placeholder: {
                 ProgressView()
+                    .foregroundColor(.white)
+                    .padding()
             })
             
             VStack(alignment: .leading) {
                 Spacer()
-                Text(title)
-                    .font(.headline)
-                    .lineLimit(1)
-                    .foregroundColor(.white)
 
-                Text(description)
-                    .font(.subheadline)
-                    .lineLimit(2)
-                    .foregroundColor(.white)
+//                Text(description)
+//                    .font(.subheadline)
+//                    .lineLimit(2)
+//                    .foregroundColor(.white)
 
                 HStack {
-                    Text("Rating:")
-                        .font(.subheadline)
+                    Text(title)
+                        .font(.caption)
+                        .lineLimit(1)
                         .foregroundColor(.white)
 
                     Spacer()
-                    Text("\(String(format: "%.1f", rating))")
-                        .foregroundColor(.white)
+                    Label("\(String(format: "%.0f", rating))", systemImage: "star.fill")
+                        .foregroundColor(.yellow)
+                        .font(.caption)
                 }
             }
             .padding()
@@ -56,8 +56,8 @@ struct MovieCard: View {
 
             
         }
-        .frame(width: 170 , height: 230)
-        .cornerRadius(12)
+        .frame(width: 170 , height: 200)
+        .cornerRadius(20)
         .onAppear(perform: {
             // to get start from 1
             

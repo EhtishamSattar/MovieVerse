@@ -15,13 +15,34 @@ struct MovieVerseApp: App {
     @StateObject private var movieManager = MovieManager()
     
     init() {
-        let appearance = UITabBarAppearance()
-        appearance.stackedLayoutAppearance.selected.iconColor = UIColor(named: "white")
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor(named: "ThemeColor") ?? UIColor.white]
         
+        // Tab bar Customization
+        let appearance = UITabBarAppearance()
+        appearance.backgroundColor = UIColor(named: "BackgroundColor")
+
+        appearance.stackedLayoutAppearance.selected.iconColor = .blue
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        appearance.stackedLayoutAppearance.normal.iconColor = .white
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+
         UITabBar.appearance().standardAppearance = appearance
         UITabBar.appearance().scrollEdgeAppearance = appearance
+        
+        // Navbar Customization
+        let Navappearance = UINavigationBarAppearance()
+        Navappearance.titleTextAttributes = [
+            .foregroundColor: UIColor.white
+        ]
+        Navappearance.backgroundColor = UIColor(named: "BackgroundColor") 
+
+        Navappearance.backgroundEffect = UIBlurEffect(style: .regular)
+        Navappearance.backgroundColor = UIColor.clear
+        
+        UINavigationBar.appearance().standardAppearance = Navappearance
+        UINavigationBar.appearance().scrollEdgeAppearance = Navappearance
     }
+
     
     var body: some Scene {
         WindowGroup {
@@ -51,7 +72,6 @@ struct MovieVerseApp: App {
                                 .foregroundColor(.white)
                         }
                         .background(Color("BackgroundColor"))
-                    
                     
                 }
             }
