@@ -16,9 +16,14 @@ struct MovieCardScrollable: View {
                             .frame(width: geometry.size.width, height: geometry.size.height)
                             .cornerRadius(30)
                     } placeholder: {
-                        ProgressView()
-                            .foregroundColor(.white)
-                            .padding()
+                        VStack{
+                            Spacer()
+                            ProgressView()
+                                .tint(.white)
+                                .padding()
+                            Spacer()
+                        }
+                        
                     }
                 }
                 .frame(width: 240, height: 330)

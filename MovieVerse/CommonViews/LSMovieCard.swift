@@ -10,7 +10,7 @@ import SwiftUI
 struct LSMovieCard: View {
     @ObservedObject var movies_Data : MoviesViewModel
     var movie : MovieItem?
-    
+    @Binding var count : Int
     var body: some View {
     
         HStack(spacing: 0) {
@@ -33,13 +33,14 @@ struct LSMovieCard: View {
                         .foregroundColor(Color.white)
                         .padding()
                 }
-                
+                Spacer()
                 
                 VStack(alignment: .leading) {
                     if let title = movie.original_title {
                         Text(title)
                             .font(.title2)
                             .font(Font.headline.weight(.bold))
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     Spacer()
                     
@@ -70,14 +71,23 @@ struct LSMovieCard: View {
                 .frame(maxWidth: .infinity)
                 
             }
+            Spacer()
             
         }
         .background(Color("BackgrounColor"))
         .frame(maxWidth: .infinity, maxHeight: 150)
         .padding(.horizontal)
-        .onAppear {
-            print(movie!)
-        }
+        .onAppear(perform: {
+            // to get start from 1
+            
+            // this count is the binded published variable of MovieViewModel class
+            // to count the results appeared via MovieCard
+            count = count + 1
+            //print(count)
+            Task{
+                await movies_Data.getMoviesData()
+            }
+        })
     }
 }
 

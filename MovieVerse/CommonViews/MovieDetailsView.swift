@@ -154,6 +154,7 @@ struct MovieDetailsView: View {
                     
                 }else{
                     ProgressView()
+                        .tint(.white)
                 }
                 HStack(spacing: 0) {
                     if let path = movie.poster_path{
@@ -167,7 +168,7 @@ struct MovieDetailsView: View {
                             
                         } placeholder: {
                             ProgressView()
-                                .foregroundColor(.white)
+                                .tint(.white)
                                 .padding()
                         }
                     }else {
@@ -176,28 +177,14 @@ struct MovieDetailsView: View {
                             .padding()
                     }
                     
-                    
-//                    VStack {
-//                        Spacer() // Push the text to the bottom
-//                        Text(movie.title ?? "none")
-//                            .font(.title)
-//                            .font(Font.headline.weight(.bold))
-//                            .frame(maxWidth: .infinity) // Adjust as needed
-//                            .minimumScaleFactor(0.3)
-//                            .padding(.leading, -10)
-//                            .padding(.vertical, 5)
-//                        
-//                    }
-//                    .frame(maxWidth: .infinity, alignment: .leading)
                     VStack {
-                        Spacer() // Push the text to the bottom
+                        Spacer()
                         Text(movie.title ?? "none")
                             .font(.title)
-                            .fontWeight(.bold) // Combines font and weight for simplicity
-                            .frame(maxWidth: .infinity, alignment: .leading) // Aligns the text to the leading edge
-                            .lineLimit(2) // Adjusts to show text in 2 lines max, change as needed
+                            .fontWeight(.bold)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .lineLimit(2)
                             .minimumScaleFactor(0.7) // Scales down to half its size if needed
-                            //.padding(.leading, -5)
                             .padding(.horizontal, 10)
                             .padding(.vertical, 5)
                     }
@@ -257,30 +244,12 @@ struct MovieDetailsView: View {
         .navigationBarBackButtonHidden(true)
         .foregroundColor(Color.white)
         .background(Color("BackgroundColor"))
-        //.navigationTitle(movie?.title ?? "Movie Detail")
-        //.navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            //            let newMovie = Movie(id: Int32(Date().timeIntervalSince1970), title: movieTitle)
-            //                            movieManager.createData(movie: newMovie)
-            //if let movie = movie {
             if let movie = movie {
-                movieManager.createData(movie: movie)
+                movies_Data.addMovieToRecentlyViewed(movie: movie)
             }
         }
         .ignoresSafeArea()
-        //        .navigationBarItems(
-        //            trailing: Button(action: {
-        //
-        //            }
-        //                            )
-        //            {
-        //                Image(systemName: "bookmark")
-        //                //                 onTapGesture {
-        //                //                     isFavorite.toggle()
-        //                //                 }
-        //                    .foregroundColor(isFavorite ? .yellow : .white)
-        //            }
-        //        )
     }
     
 }

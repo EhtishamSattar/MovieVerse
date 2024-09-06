@@ -15,6 +15,7 @@ class MoviesViewModel : ObservableObject {
     
     //locally searched movies in localmovies
     @Published var localmovies : [MovieItem] = []
+    @Published var searchedMovies : [MovieItem] = []
     
     @Published var pageNumber : Int = 1
     @Published var count : Int = 0
@@ -29,33 +30,82 @@ class MoviesViewModel : ObservableObject {
     // Singleton Class shared instance
     let shared = BaseApi.shared
     
+    // Initializing Data
     init() {
         // it is necessary to setup the debounce method on Class initialization
         setDebouncedSearchValue()
         setDebouncedLocalSearchValue()
         Task {
-            await getMoviesData()
+            await fetchServingMoviesData()
         }
+        getRecentlyViewedData()
     }
-
-    func getMoviesData() async {
+    
+    // this is the starter data fetching function that every users will see when coming on first time
+    func fetchServingMoviesData() async {
+        
         do {
+            count = 0
+            pageNumber = 1
+            searchedMovies = []
             if let data = try await shared.getMoviesData(pageNumber: self.pageNumber) {
                 self.moviesData = data
                 if let movies = data.results {
-                    self.movies = self.movies + movies
+                    // Inititalizing movies
+                    self.movies = movies
+                    
+                    //Initializing local movies with 20 data on app start
+                    self.localmovies.insert(contentsOf: movies, at: localmovies.endIndex)
                 }
             }
         } catch {
             print("Failed to fetch movies data: \(error)")
         }
     }
-
+    
+    
+    // this function is for Data fetching based on pageNumber - Helps in Pagination
+    func getMoviesData() async {
+        
+        do {
+            print(count)
+            let preheadCount = count + 4
+            if preheadCount < moviesData.total_results {
+                
+                // print("iN IF")
+                // > phly mery pas movie card ka onAppear count 16 miss kr rha tha is liye lgaya
+                
+                if preheadCount >= resultsSize * pageNumber {
+                    pageNumber = preheadCount / resultsSize
+                    print("fetching data for \(pageNumber)")
+                    pageNumber = pageNumber + 1
+                    
+                    //await getMoviesData()
+                    
+                    if let data = try await shared.getMoviesData(pageNumber: self.pageNumber) {
+                        self.moviesData = data
+                        if let movies = data.results {
+                            self.movies = self.movies + (moviesData.results ?? [])
+                            self.localmovies.insert(contentsOf: movies, at: localmovies.endIndex)
+                        }
+                    }
+                }
+            }
+            
+        } catch {
+            print("Failed to fetch movies data: \(error)")
+        }
+    }
+    
+    // helper function to get PosterImage Url by appending path to base url
     func getPosterImageURL(path: String) -> URL? {
+        
         return Constants.getImageURL(path: path, typeImage: .posterImage)
     }
     
+    // helper function to get Backdrop Url by appending path to base url
     func getBackdropPath(path: String? ) -> URL? {
+        
         if let path = path {
             return Constants.getImageURL(path: path, typeImage: .backDropImage)
             //return URL(string: Constants.ImageUrl + path)
@@ -63,10 +113,11 @@ class MoviesViewModel : ObservableObject {
         return nil
         
     }
-
+    
+    // this function is not used - Previously used for pagination purpose
     func loadMoreData() async {
-        //print("\(moviesData.total_results)-- \(count)")
         
+        //print("\(moviesData.total_results)-- \(count)")
         Task{
             let preheadCount = count + 4
             if preheadCount < moviesData.total_results {
@@ -86,28 +137,37 @@ class MoviesViewModel : ObservableObject {
         
     }
     
+    // Debounced value for global Search text
     func setDebouncedSearchValue(){
+        
         $searchValue
             .debounce(for: .seconds(0.75), scheduler: RunLoop.main)
             .assign(to: &$debouncedSearchValue)
-                      
+        
     }
     
+    // Debounced value for local Search text
     func setDebouncedLocalSearchValue(){
+        
         $localSearchValue
             .debounce(for: .seconds(0.75), scheduler: RunLoop.main)
             .assign(to: &$debouncedLocalSearchValue)
-                      
+        
     }
-
+    
+    
+    // function to search Movies from api , this is initializing the searchMovies again and again
     func getSearchMovieData(movieName: String) async {
+        
         if !movieName.isEmpty {
             do {
                 if let data = try await shared.getSearhedMovieData(name: movieName){
                     self.moviesData = data
-                    self.movies = []
+                    self.searchedMovies = []
                     if let movies = data.results {
-                        self.movies = self.movies + movies
+                        self.searchedMovies = self.searchedMovies + movies
+                        //Appending Searched movies at the end of localmovies
+                        //self.localmovies.insert(contentsOf: movies, at: self.localmovies.endIndex)
                     }
                 }
             } catch {
@@ -115,25 +175,26 @@ class MoviesViewModel : ObservableObject {
             }
         }else {
             print("search empty")
-            await getMoviesData()
+            await fetchServingMoviesData()
         }
         
     }
     
+    // This function brings the data from CoreData - I stored Recently Viewed movies in Core Data
     func getRecentlyViewedData(){
+        
         recentlyViewedMovies = movieManager.getRecentlyViewedData()
-        localmovies = recentlyViewedMovies
+        //localmovies = recentlyViewedMovies
     }
     
-    func getSearchedMoviesFromRecentlyViewed(movieName: String) {
-        // Check if the movie name is not empty
+    // this function used in searching movie from the localmovies
+    func searchMoviefromLocals(movieName: String) {
+    
         if !movieName.isEmpty {
-            // Clear the local movies array before adding new search results
             localmovies.removeAll()
-
-            // Loop through the recently viewed movies
-            for movie in recentlyViewedMovies {
-                // Check if either title or original_title contains the search string
+        
+            for movie in movies {
+                
                 if let title = movie.title, title.contains(movieName) {
                     print("Appending movies")
                     localmovies.append(movie)
@@ -141,14 +202,22 @@ class MoviesViewModel : ObservableObject {
                     print("Appending movies")
                     localmovies.append(movie)
                 }
-
+                
+                
             }
+            print("moviesss",localmovies)
         } else {
-            // If search term is empty, show all recently viewed movies
             localmovies.removeAll()
-            localmovies = recentlyViewedMovies
+            localmovies = movies
         }
     }
-
-
+    
+    // Addding Data to Core Data
+    func addMovieToRecentlyViewed(movie: MovieItem){
+        
+        movieManager.createData(movie: movie)
+        getRecentlyViewedData()
+    }
+    
+    
 }

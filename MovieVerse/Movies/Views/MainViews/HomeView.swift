@@ -10,31 +10,17 @@ import SwiftUI
 struct HomeView: View {
     @ObservedObject var movies_Data : MoviesViewModel
     //@State var count = 0
-    var imageUrl : URL?
+    //var imageUrl : URL?
     
-    let columns: [GridItem] = [
-        GridItem(.flexible()),
-        GridItem(.flexible()),
-        //GridItem(.flexible(), spacing: 6, alignment: nil),
-    ]
-    
-    let url = URL(string: "https://picsum.photos/300")
+    //let url = URL(string: "https://picsum.photos/300")
     var body: some View {
         NavigationView{
             VStack{
-                //                SearchField(placeholderText: "Search Movie", searchText: $movies_Data.searchValue)
-                //                    .onChange(of: movies_Data.debouncedSearchValue) {newValue in
-                //                        print(newValue)
-                //                        Task{
-                //                            await movies_Data.getSearchMovieData(movieName: newValue)
-                //                        }
-                //                    }
-                
-                SearchField(placeholderText: "Search from Recently Viewed", searchText: $movies_Data.localSearchValue)
+                SearchField(placeholderText: "Search from Locals", searchText: $movies_Data.localSearchValue)
                     .onChange(of: movies_Data.debouncedLocalSearchValue){ newValue in
                         print(newValue)
-                        // will change this method
-                        movies_Data.getSearchedMoviesFromRecentlyViewed(movieName: newValue)                }
+                        movies_Data.searchMoviefromLocals(movieName: newValue)
+                    }
                 Spacer()
                 
                 if movies_Data.movies.isEmpty {
@@ -43,7 +29,7 @@ struct HomeView: View {
                 }else {
                     
                     ScrollView(.vertical, showsIndicators: false) {
-                        
+                        // Upcoming movie Container
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
                                 ForEach(Array(movies_Data.movies.enumerated()), id: \.offset) { index, movie in
@@ -55,41 +41,11 @@ struct HomeView: View {
                             .frame(maxHeight: 400)
                             
                         }
-                        .padding(.vertical, 15)
+                        //.padding(.vertical, 8)
                         .frame(maxWidth: .infinity, maxHeight: 720)
                         
+                        LocalSearchContainer(movies_Data: movies_Data)
                         
-                        LazyVGrid(
-                            columns: columns,
-                            alignment: .center,
-                            spacing: 10,
-                            pinnedViews: [.sectionHeaders]
-                        ) {
-                            Section(header: ZStack {
-                                Text("Movies")
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .foregroundColor(.white)
-                                    .background(Color("BackgroundColor"))
-                                    .font(.headline.weight(.bold))
-                                    .font(.largeTitle)
-                            }) {
-                                ForEach(Array(movies_Data.movies.enumerated()), id: \.offset) { index, movie in
-                                    NavigationLink(destination: MovieDetailsView(movies_Data: movies_Data, movie: movie)) {
-                                        MovieCard(
-                                            movies_Data: movies_Data,
-                                            movieImage: movies_Data.getBackdropPath(path: movie.poster_path ?? ""),
-                                            title: movie.title ?? "none",
-                                            description: movie.overview ?? "none",
-                                            rating: movie.vote_average,
-                                            count: $movies_Data.count
-                                        )
-                                    }
-                                }
-                            }
-                        }
-                        
-                        .frame(maxHeight: .infinity)
                     }
                     
                 }

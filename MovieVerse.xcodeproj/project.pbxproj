@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		0497BB472C886A2D00A450E7 /* LSMovieCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0497BB462C886A2D00A450E7 /* LSMovieCard.swift */; };
 		0497BB492C89EF9E00A450E7 /* MovieCardScrollable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0497BB482C89EF9E00A450E7 /* MovieCardScrollable.swift */; };
+		0497BB4B2C8B1D8200A450E7 /* LocalSearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0497BB4A2C8B1D8200A450E7 /* LocalSearchContainer.swift */; };
+		0497BB4D2C8B1EC400A450E7 /* GlobalSearchContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0497BB4C2C8B1EC400A450E7 /* GlobalSearchContainer.swift */; };
 		049CCE9B2C859905001AA1C8 /* MovieVerseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049CCE9A2C859905001AA1C8 /* MovieVerseApp.swift */; };
 		049CCE9D2C859905001AA1C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 049CCE9C2C859905001AA1C8 /* ContentView.swift */; };
 		049CCE9F2C85990B001AA1C8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 049CCE9E2C85990B001AA1C8 /* Assets.xcassets */; };
@@ -35,6 +37,8 @@
 /* Begin PBXFileReference section */
 		0497BB462C886A2D00A450E7 /* LSMovieCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LSMovieCard.swift; sourceTree = "<group>"; };
 		0497BB482C89EF9E00A450E7 /* MovieCardScrollable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieCardScrollable.swift; sourceTree = "<group>"; };
+		0497BB4A2C8B1D8200A450E7 /* LocalSearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalSearchContainer.swift; sourceTree = "<group>"; };
+		0497BB4C2C8B1EC400A450E7 /* GlobalSearchContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalSearchContainer.swift; sourceTree = "<group>"; };
 		049CCE972C859905001AA1C8 /* MovieVerse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieVerse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		049CCE9A2C859905001AA1C8 /* MovieVerseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MovieVerseApp.swift; sourceTree = "<group>"; };
 		049CCE9C2C859905001AA1C8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -149,6 +153,11 @@
 			isa = PBXGroup;
 			children = (
 				049CCEB22C85A88B001AA1C8 /* SearchField.swift */,
+				049CCEB52C85A930001AA1C8 /* MovieCard.swift */,
+				049CCECD2C871948001AA1C8 /* NoMovieFoundView.swift */,
+				049CCECF2C871F18001AA1C8 /* MovieDetailsView.swift */,
+				0497BB462C886A2D00A450E7 /* LSMovieCard.swift */,
+				0497BB482C89EF9E00A450E7 /* MovieCardScrollable.swift */,
 			);
 			path = CommonViews;
 			sourceTree = "<group>";
@@ -156,11 +165,8 @@
 		049CCEB42C85A90F001AA1C8 /* CommonViews */ = {
 			isa = PBXGroup;
 			children = (
-				049CCEB52C85A930001AA1C8 /* MovieCard.swift */,
-				049CCECD2C871948001AA1C8 /* NoMovieFoundView.swift */,
-				049CCECF2C871F18001AA1C8 /* MovieDetailsView.swift */,
-				0497BB462C886A2D00A450E7 /* LSMovieCard.swift */,
-				0497BB482C89EF9E00A450E7 /* MovieCardScrollable.swift */,
+				0497BB4A2C8B1D8200A450E7 /* LocalSearchContainer.swift */,
+				0497BB4C2C8B1EC400A450E7 /* GlobalSearchContainer.swift */,
 			);
 			path = CommonViews;
 			sourceTree = "<group>";
@@ -299,6 +305,8 @@
 				049CCEC82C85ED36001AA1C8 /* MoviesData.swift in Sources */,
 				049CCEC62C85ECD6001AA1C8 /* MoviesViewModel.swift in Sources */,
 				049CCED02C871F18001AA1C8 /* MovieDetailsView.swift in Sources */,
+				0497BB4B2C8B1D8200A450E7 /* LocalSearchContainer.swift in Sources */,
+				0497BB4D2C8B1EC400A450E7 /* GlobalSearchContainer.swift in Sources */,
 				049CCEEC2C875BFB001AA1C8 /* MovieManager.swift in Sources */,
 				049CCEB62C85A930001AA1C8 /* MovieCard.swift in Sources */,
 				049CCECC2C85F222001AA1C8 /* BaseApi.swift in Sources */,

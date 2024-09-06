@@ -66,12 +66,11 @@ struct MovieVerseApp: App {
                         .background(Color("BackgroundColor"))
                         //.environmentObject(movieManager)
                     
-                    RecentlyViewedView(movies_Data: moviesData/*, movieManager: movieManager*/)
+                    RecentlyViewedView(movies_Data: moviesData)
                         .tabItem {
                             Label("Recently Viewed", systemImage: "clock.arrow.circlepath")
-                                .foregroundColor(.white)
                         }
-                        .background(Color("BackgroundColor"))
+                        .badge(moviesData.recentlyViewedMovies.count)
                     
                 }
             }

@@ -10,17 +10,6 @@ import CoreData
 
 struct RecentlyViewedView: View {
     @ObservedObject var movies_Data : MoviesViewModel
-    //@ObservedObject var movieManager : MovieManager
-    //@State var recentlyViewedData : [MovieItem] = []
-    
-    //    init(){
-    //        recentlyViewedData = movieManager.getRecentlyViewedData()
-    //    }
-    //    @FetchRequest(
-    //            entity: MovieItem.entity(), // Ensure this matches the entity name in your model
-    //            sortDescriptors: [] // Example sort descriptor
-    //        )
-    //    var movieItems: FetchedResults<MovieItem>
     
     var body: some View {
         VStack{
@@ -40,7 +29,7 @@ struct RecentlyViewedView: View {
             }else {
                 ScrollView(showsIndicators: false){
                     ForEach(movies_Data.recentlyViewedMovies, id: \.self) { movieItem in
-                        LSMovieCard(movies_Data: movies_Data,movie: movieItem)
+                        LSMovieCard(movies_Data: movies_Data,movie: movieItem, count: $movies_Data.count)
                             .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
                             .padding()
                     }
@@ -49,19 +38,17 @@ struct RecentlyViewedView: View {
             }
         }
         .frame(maxHeight: .infinity)
-        .onAppear {
-            //recentlyViewedData = movieManager.getRecentlyViewedData()
-            movies_Data.getRecentlyViewedData()
-            //print(recentlyViewedData)
-        }
+//        .onAppear {
+//            //recentlyViewedData = movieManager.getRecentlyViewedData()
+//            movies_Data.getRecentlyViewedData()
+//            //print(recentlyViewedData)
+//        }
         .background(Color("BackgroundColor"))
-        
-        //        .navigationTitle("Recently Viewed")
-        //        .foregroundColor(.white)
         
         
         
     }
+    
 }
 
 #Preview {

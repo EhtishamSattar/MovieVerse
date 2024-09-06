@@ -12,26 +12,22 @@ struct MovieCard: View {
 
     var body: some View {
         ZStack {
-            // Using AsyncImage for loading the movie image
+            // Using AsyncImage for dynamically loading the movie image
             AsyncImage(url: movieImage, content: { Image in
                 Image
                     .resizable()
-//                    .frame(maxWidth: .infinity)
-//                    .scaledToFill()
+                    .scaledToFit()
+                    .frame(maxWidth: 130, maxHeight: .infinity)
+                    .cornerRadius(30)
             
             }, placeholder: {
                 ProgressView()
-                    .foregroundColor(.white)
+                    .tint(.white)
                     .padding()
             })
             
             VStack(alignment: .leading) {
                 Spacer()
-
-//                Text(description)
-//                    .font(.subheadline)
-//                    .lineLimit(2)
-//                    .foregroundColor(.white)
 
                 HStack {
                     Text(title)
@@ -58,16 +54,6 @@ struct MovieCard: View {
         }
         .frame(width: 170 , height: 200)
         .cornerRadius(20)
-        .onAppear(perform: {
-            // to get start from 1
-            
-            // this count is the binded published variable of MovieViewModel class
-            // to count the results appeared via MovieCard
-            count = count + 1
-            Task{
-                await movies_Data.loadMoreData()
-            }
-        })
         
     }
 }
