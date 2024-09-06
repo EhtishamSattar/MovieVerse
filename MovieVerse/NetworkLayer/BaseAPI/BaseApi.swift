@@ -15,6 +15,7 @@ class BaseApi {
     
     var api_Url = Constants.baseApiUrl
     var searchApi_Url = Constants.baseSearchApiUrl
+    var upComingMoviesUrl = Constants.upComingMoviesUrl
     
     func getMoviesData(pageNumber : Int) async throws -> MoviesData? {
         api_Url = api_Url + "&page=\(pageNumber)"
@@ -29,6 +30,7 @@ class BaseApi {
             
             let (data, error) = try await URLSession.shared.data(from: api_Url)
             print(error)
+            
             let moviesData = try decoder.decode(MoviesData.self, from: data)
             return moviesData
         }
@@ -43,6 +45,20 @@ class BaseApi {
             let (data, error) = try await URLSession.shared.data(from: searchApi_Url)
             print(error)
             let moviesData = try JSONDecoder().decode(MoviesData.self, from: data)
+            return moviesData
+        }
+        return nil
+    }
+    
+    func fetchUpcomingMovies(pageNumber: Int) async throws -> MoviesData?  {
+        upComingMoviesUrl = upComingMoviesUrl + "&page=\(pageNumber)"
+        print(upComingMoviesUrl)
+        if let upComingMoviesUrl = URL(string: upComingMoviesUrl) {
+            let (data, error) = try await URLSession.shared.data(from: upComingMoviesUrl)
+            
+            print(error)
+            let moviesData = try JSONDecoder().decode(MoviesData.self, from: data)
+            
             return moviesData
         }
         return nil

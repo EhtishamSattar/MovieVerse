@@ -8,7 +8,9 @@
 import SwiftUI
 
 struct GlobalSearchContainer: View {
+   
     @ObservedObject var movies_Data : MoviesViewModel
+    
     var body: some View {
         if movies_Data.searchedMovies.isEmpty {
             if movies_Data.movies.isEmpty{
@@ -17,8 +19,8 @@ struct GlobalSearchContainer: View {
                 Spacer()
             }else{
                 LazyVStack{
-                    ForEach(movies_Data.movies, id: \.self){ movie in
-                        LSMovieCard(movies_Data: movies_Data,movie: movie, count: $movies_Data.count)
+                    ForEach(Array(movies_Data.movies.enumerated()), id: \.offset){ index, movie in
+                        LSMovieCard(movies_Data: movies_Data,movie: movie, index: index)
                             .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
                             .padding()
                     }
@@ -28,15 +30,12 @@ struct GlobalSearchContainer: View {
         }
         else{
             LazyVStack{
-                ForEach(movies_Data.searchedMovies, id: \.self){ movie in
-                    LSMovieCard(movies_Data: movies_Data,movie: movie, count: $movies_Data.count)
+                ForEach(Array(movies_Data.searchedMovies.enumerated()), id: \.offset){ index, movie in
+                    LSMovieCard(movies_Data: movies_Data,movie: movie, index: index)
                         .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
                         .padding()
                 }
             }
-            
-            
-            
         }
     }
 }

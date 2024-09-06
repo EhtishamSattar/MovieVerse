@@ -10,85 +10,87 @@ import SwiftUI
 struct LSMovieCard: View {
     @ObservedObject var movies_Data : MoviesViewModel
     var movie : MovieItem?
-    @Binding var count : Int
+    var index : Int
     var body: some View {
     
-        HStack(spacing: 0) {
-            if let movie = movie {
-                if let moviePath = movie.poster_path {
-                    AsyncImage(url: movies_Data.getPosterImageURL(path: moviePath )) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(maxWidth: 150, maxHeight: 170)
-                            .cornerRadius(20)
-                        
-                    } placeholder: {
+        NavigationLink {
+            MovieDetailsView(movies_Data: movies_Data,movie: movie)
+        } label: {
+            HStack(spacing: 0) {
+                if let movie = movie {
+                    if let moviePath = movie.poster_path {
+                        AsyncImage(url: movies_Data.getBackdropPath(path: moviePath )) { image in
+                            image
+                                .resizable()
+                                .scaledToFill()
+                                .frame(maxWidth: 150, maxHeight: 170)
+                                .cornerRadius(20)
+                            
+                        } placeholder: {
+                            ProgressView()
+                                .tint(.white)
+                                .padding()
+                        }
+                    }else {
                         ProgressView()
-                            .foregroundColor(Color.white)
+                            .tint(.white)
                             .padding()
-                    }
-                }else {
-                    ProgressView()
-                        .foregroundColor(Color.white)
-                        .padding()
-                }
-                Spacer()
-                
-                VStack(alignment: .leading) {
-                    if let title = movie.original_title {
-                        Text(title)
-                            .font(.title2)
-                            .font(Font.headline.weight(.bold))
-                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     Spacer()
                     
-                    Label("\(movie.adult ? "Adult" : "General")", systemImage: "person.fill")
-                        .font(.subheadline)
-                        .foregroundColor(movie.adult ? .red : .green)
-                        .accentColor(.white)
-                    
-                    
-                    Label("\(Int(movie.vote_average))", systemImage: "doc.fill")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    
-                    Label("\(movie.release_date ?? "None")", systemImage: "calendar")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                        .accentColor(.white)
-                   
-                    
-                    Label("\(movie.vote_count)", systemImage: "bookmark")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                        .accentColor(.white)
+                    VStack(alignment: .leading) {
+                        if let title = movie.original_title {
+                            Text(title)
+                                .font(.title2)
+                                .font(Font.headline.weight(.bold))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        Spacer()
+                        
+                        Label("\(movie.adult ? "Adult" : "General")", systemImage: "person.fill")
+                            .font(.subheadline)
+                            .foregroundColor(movie.adult ? .red : .green)
+                            .accentColor(.white)
+                        
+                        
+                        Label("\(Int(movie.vote_average))", systemImage: "doc.fill")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                        
+                        Label("\(movie.release_date ?? "None")", systemImage: "calendar")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .accentColor(.white)
+                       
+                        
+                        Label("\(movie.vote_count)", systemImage: "bookmark")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                            .accentColor(.white)
+                        
+                    }
+                    //.padding(.horizontal, 10)
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
                     
                 }
-                //.padding(.horizontal, 10)
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
+                Spacer()
                 
             }
-            Spacer()
-            
+            .background(Color("BackgrounColor"))
+            .frame(maxWidth: .infinity, maxHeight: 150)
+            .padding(.horizontal)
+            .onAppear(perform: {
+                movies_Data.count = index
+                //print(count)
+                Task{
+                    await movies_Data.getMoviesData()
+                }
+            })
         }
-        .background(Color("BackgrounColor"))
-        .frame(maxWidth: .infinity, maxHeight: 150)
-        .padding(.horizontal)
-        .onAppear(perform: {
-            // to get start from 1
-            
-            // this count is the binded published variable of MovieViewModel class
-            // to count the results appeared via MovieCard
-            count = count + 1
-            //print(count)
-            Task{
-                await movies_Data.getMoviesData()
-            }
-        })
-    }
+        }
+
+        
 }
 
 

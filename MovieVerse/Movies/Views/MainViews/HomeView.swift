@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
+   
     @ObservedObject var movies_Data : MoviesViewModel
     //@State var count = 0
     //var imageUrl : URL?
@@ -29,33 +30,40 @@ struct HomeView: View {
                 }else {
                     
                     ScrollView(.vertical, showsIndicators: false) {
+                        Text("Upcoming Movies")
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .foregroundColor(.white)
+                            .background(Color("BackgroundColor"))
+                            .font(.headline.weight(.bold))
+                            .font(.largeTitle)
+                        
                         // Upcoming movie Container
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack {
-                                ForEach(Array(movies_Data.movies.enumerated()), id: \.offset) { index, movie in
+                            LazyHStack {
+                                ForEach(Array(movies_Data.upComingMovies.enumerated()), id: \.offset) { index, movie in
                                     MovieCardScrollable(movies_Data: movies_Data, index: index, movie: movie)
                                 }
                             }
                             .padding(30)
                             .background(Color("BackgroundColor"))
-                            .frame(maxHeight: 400)
+                            .frame(maxHeight: 300)
                             
                         }
                         //.padding(.vertical, 8)
                         .frame(maxWidth: .infinity, maxHeight: 720)
                         
                         LocalSearchContainer(movies_Data: movies_Data)
+                            .frame(maxWidth: .infinity)
                         
                     }
-                    
                 }
-                
             }
             .padding(.horizontal)
             .background(Color("BackgroundColor"))
         }
-        
-        
+    
     }
 }
 

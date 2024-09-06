@@ -8,53 +8,60 @@ struct MovieCardScrollable: View {
     var body: some View {
         ZStack(alignment: .bottomLeading) {
             if let path = movie.poster_path {
-                GeometryReader { geometry in
-                    AsyncImage(url: movies_Data.getBackdropPath(path: path)) { image in
-                        image
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: geometry.size.width, height: geometry.size.height)
-                            .cornerRadius(30)
-                    } placeholder: {
-                        VStack{
-                            Spacer()
-                            ProgressView()
-                                .tint(.white)
-                                .padding()
-                            Spacer()
-                        }
-                        
+                AsyncImage(url: movies_Data.getBackdropPath(path: path)) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 200, height: 250)
+                        .cornerRadius(30)
+                    //Text(movie.dates)
+                } placeholder: {
+                    VStack{
+                        Spacer()
+                        ProgressView()
+                            .tint(.white)
+                            .padding()
+                            .frame(width: 200, height: 300)
+                        Spacer()
                     }
+                    
                 }
-                .frame(width: 240, height: 330)
+                
                 //.background(Color.yellow)
                 
                 Text("\(index + 1)")
-                    .font(.system(size: 150))
+                    .font(.system(size: 100))
                     .fontWeight(.bold)
                     .foregroundColor(Color.blue)
                     .padding(10)
                     .overlay(
                         // Blue outline effect
                         Text("\(index + 1)")
-                            .font(.system(size: 150))
+                            .font(.system(size: 100))
                             .fontWeight(.bold)
                             .foregroundColor(.clear)
                             .background(
                                 Text("\(index + 1)")
-                                    .font(.system(size: 150))
+                                    .font(.system(size: 100))
                                     .fontWeight(.bold)
                                     .foregroundColor(Color("BackgroundColor"))
-                                    
+                                
                             )
-                            .mask(Text("\(index + 1)").font(.system(size: 150)))
-                        )
-                    .padding([.bottom, .leading], -50)
+                            .mask(Text("\(index + 1)").font(.system(size: 100)))
+                    )
+                    .padding([.bottom, .leading], -30)
                     .padding(.bottom, -15)
-
+                
             }
         }
         .frame(height: 350)
+        .onAppear(perform: {
+            // start from 1
+            movies_Data.upComCount = index + 1
+            Task{
+                await movies_Data.getUpcomingMovies()
+            }
+        })
         //.background(Color.green)
     }
 }

@@ -10,25 +10,40 @@ import Foundation
 @MainActor
 class MoviesViewModel : ObservableObject {
     @Published var moviesData : MoviesData = MoviesData()
+   
+    
     // globaly Search movie in movies
     @Published var movies : [MovieItem] = []
     
     //locally searched movies in localmovies
     @Published var localmovies : [MovieItem] = []
+    
+    //search Movies result
     @Published var searchedMovies : [MovieItem] = []
     
+    // recently viewed movies
+    @Published var recentlyViewedMovies : [MovieItem] = []
+    
+    @Published var upComingMovies : [MovieItem] = []
+    // pages
     @Published var pageNumber : Int = 1
     @Published var count : Int = 0
-    var resultsSize = 20
+   
+    @Published var upComingPageNumber : Int = 1
+    @Published var upComCount : Int = 0
+    @Published var upComResults : Int = 0
+    
+    //Search Values
     @Published var searchValue = ""
     @Published var debouncedSearchValue = ""
     @Published var localSearchValue = ""
     @Published var debouncedLocalSearchValue = ""
-    var movieManager = MovieManager()
-    @Published var recentlyViewedMovies : [MovieItem] = []
+    
     
     // Singleton Class shared instance
     let shared = BaseApi.shared
+    var resultsSize = 20
+    var movieManager = MovieManager()
     
     // Initializing Data
     init() {
@@ -36,9 +51,12 @@ class MoviesViewModel : ObservableObject {
         setDebouncedSearchValue()
         setDebouncedLocalSearchValue()
         Task {
+            //Async Calls
             await fetchServingMoviesData()
+            await getUpcomingMovies()
         }
         getRecentlyViewedData()
+        
     }
     
     // this is the starter data fetching function that every users will see when coming on first time
@@ -96,6 +114,55 @@ class MoviesViewModel : ObservableObject {
             print("Failed to fetch movies data: \(error)")
         }
     }
+    
+    // Fetching Upcoming Movies Data
+    func getUpcomingMovies() async {
+        
+        if !upComingMovies.isEmpty {
+            //print("----", upComCount)
+            let preheadCount = upComCount + 4
+            print(upComCount)
+            if preheadCount < upComResults {
+                //print("innnnnn")
+                if  preheadCount >= resultsSize * upComingPageNumber {
+                    upComingPageNumber = upComingPageNumber + 1
+                    //print("SGFSDGSDGSDXGDSDG",upComingPageNumber)
+                    do {
+                        if let data = try await shared.fetchUpcomingMovies(pageNumber: self.upComingPageNumber) {
+                            //self.moviesData = data
+                            upComCount = data.total_results
+                            if let movies = data.results {
+                                // Inititalizing movies
+                                self.upComingMovies = self.upComingMovies + movies
+                            }
+                            print("Upcoming movies----",self.upComingMovies)
+                        }
+                    }catch let error {
+                        fatalError("\(error)")
+                    }
+                }
+                
+            }
+        }else{
+            do {
+                if let data = try await shared.fetchUpcomingMovies(pageNumber: self.upComingPageNumber) {
+                    //self.moviesData = data
+                    upComResults = data.total_results
+                    if let movies = data.results {
+                        // Inititalizing movies
+                        self.upComingMovies = movies
+                    }
+                    print("Upcoming movies----",self.upComingMovies)
+                }
+            }catch let error {
+                fatalError("\(error)")
+            }
+        }
+        
+        
+        
+    }
+    
     
     // helper function to get PosterImage Url by appending path to base url
     func getPosterImageURL(path: String) -> URL? {
@@ -207,7 +274,7 @@ class MoviesViewModel : ObservableObject {
             }
             print("moviesss",localmovies)
         } else {
-            localmovies.removeAll()
+          //  localmovies.removeAll()
             localmovies = movies
         }
     }

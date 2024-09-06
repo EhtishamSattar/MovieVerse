@@ -27,6 +27,7 @@ public class MovieItem: NSManagedObject, Codable {
         case voteCount = "vote_count"
         case genreIds = "genre_ids"
         //case timestamp
+        case dates
         case none
     }
     

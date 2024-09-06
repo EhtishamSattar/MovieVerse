@@ -9,6 +9,7 @@ import SwiftUI
 import CoreData
 
 struct RecentlyViewedView: View {
+   
     @ObservedObject var movies_Data : MoviesViewModel
     
     var body: some View {
@@ -28,10 +29,10 @@ struct RecentlyViewedView: View {
                 Spacer()
             }else {
                 ScrollView(showsIndicators: false){
-                    ForEach(movies_Data.recentlyViewedMovies, id: \.self) { movieItem in
-                        LSMovieCard(movies_Data: movies_Data,movie: movieItem, count: $movies_Data.count)
+                    ForEach(Array(movies_Data.recentlyViewedMovies.enumerated()), id: \.offset) { index,movieItem in
+                        LSMovieCard(movies_Data: movies_Data,movie: movieItem, index: index)
                             .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
-                            .padding()
+                            .padding(.vertical)
                     }
                     
                 }

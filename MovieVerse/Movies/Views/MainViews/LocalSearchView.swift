@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct LocalSearchView: View {
+   
     @ObservedObject var movies_Data : MoviesViewModel
     @State var searchValue : String = ""
+    
     var body: some View {
         VStack{
-            
             SearchField(placeholderText: "Search Movie", searchText: $movies_Data.searchValue)
                 .onChange(of: movies_Data.debouncedSearchValue) {newValue in
                     print(newValue)

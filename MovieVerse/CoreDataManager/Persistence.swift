@@ -21,7 +21,7 @@ struct PersistenceController {
 }
 
 
-
+// Temporary container to just fetch data from Api , avoiding to store that in CoreData
 class CoreDataStack {
     static let shared = CoreDataStack()
 
