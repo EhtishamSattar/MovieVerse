@@ -14,9 +14,12 @@ struct GlobalSearchContainer: View {
     var body: some View {
         if movies_Data.searchedMovies.isEmpty {
             if movies_Data.movies.isEmpty{
-                Spacer()
-                NoMovieFoundView(message: "No movie Found",subMessage: "View some Movie first to search for it in recently viewed")
-                Spacer()
+                VStack{
+                    Spacer()
+                    NoMovieFoundView(message: "No movie Found",subMessage: "Please Search movie by a good title name")
+                    Spacer()
+                }
+                
             }else{
                 LazyVStack{
                     ForEach(Array(movies_Data.movies.enumerated()), id: \.offset){ index, movie in

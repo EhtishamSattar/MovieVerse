@@ -45,6 +45,9 @@ class MoviesViewModel : ObservableObject {
     var resultsSize = 20
     var movieManager = MovieManager()
     
+    // Error message
+    @Published var apiErrorMessage : String = ""
+    
     // Initializing Data
     init() {
         // it is necessary to setup the debounce method on Class initialization
@@ -76,8 +79,10 @@ class MoviesViewModel : ObservableObject {
                     self.localmovies.insert(contentsOf: movies, at: localmovies.endIndex)
                 }
             }
+            apiErrorMessage = ""
         } catch {
             print("Failed to fetch movies data: \(error)")
+            handleError(NetworkError.badServerResponse)
         }
     }
     
@@ -109,9 +114,11 @@ class MoviesViewModel : ObservableObject {
                     }
                 }
             }
+            apiErrorMessage = ""
             
         } catch {
             print("Failed to fetch movies data: \(error)")
+            handleError(NetworkError.badServerResponse)
         }
     }
     
@@ -137,12 +144,16 @@ class MoviesViewModel : ObservableObject {
                             }
                             print("Upcoming movies----",self.upComingMovies)
                         }
-                    }catch let error {
-                        fatalError("\(error)")
+                    }catch {
+                        //print("in view Model", error)
+                        //fatalError("\(error)")
+                        handleError(NetworkError.badServerResponse)
                     }
                 }
                 
             }
+            apiErrorMessage = ""
+            
         }else{
             do {
                 if let data = try await shared.fetchUpcomingMovies(pageNumber: self.upComingPageNumber) {
@@ -152,10 +163,13 @@ class MoviesViewModel : ObservableObject {
                         // Inititalizing movies
                         self.upComingMovies = movies
                     }
-                    print("Upcoming movies----",self.upComingMovies)
+                    //print("Upcoming movies----",self.upComingMovies)
                 }
-            }catch let error {
-                fatalError("\(error)")
+                apiErrorMessage = ""
+            }catch {
+                print("in view Model", error)
+                handleError(NetworkError.badServerResponse)
+                //fatalError("\(error)")
             }
         }
         
@@ -197,6 +211,7 @@ class MoviesViewModel : ObservableObject {
                     print("fetching data for \(pageNumber)")
                     pageNumber = pageNumber + 1
                     await getMoviesData()
+                    
                 }
             }
             
@@ -286,5 +301,21 @@ class MoviesViewModel : ObservableObject {
         getRecentlyViewedData()
     }
     
+    
+    // handling error
+    func handleError(_ error: Error) {
+            switch error {
+            case NetworkError.badDataResonse:
+                apiErrorMessage = "Bad Data."
+            case NetworkError.badServerResponse:
+                print("in it")
+                apiErrorMessage = "Check Your Internet Connection."
+                print("***",apiErrorMessage)
+            case NetworkError.badUrl:
+                apiErrorMessage = "Bad Url. Check your Url."
+            default:
+                apiErrorMessage = "Something went wrong!"
+            }
+        }
     
 }
