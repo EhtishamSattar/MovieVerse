@@ -31,9 +31,16 @@ struct RecentlyViewedView: View {
                 }else {
                     ScrollView(showsIndicators: false){
                         ForEach(Array(movies_Data.recentlyViewedMovies.enumerated()), id: \.offset) { index,movieItem in
-                            LSMovieCard(movies_Data: movies_Data,movie: movieItem, index: index)
-                                .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
-                                .padding(.vertical)
+                            
+                            NavigationLink {
+                                MovieDetailsView(movies_Data: movies_Data, movie: movieItem)
+                            } label: {
+                                LSMovieCard(movies_Data: movies_Data,movie: movieItem, index: index)
+                                    .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
+                                    .padding(.vertical)
+                            }
+
+                            
                         }
                         
                     }
@@ -48,6 +55,7 @@ struct RecentlyViewedView: View {
             .background(Color("BackgroundColor"))
         }
         else{
+            
             NoMovieFoundView(message: movies_Data.apiErrorMessage, subMessage: "")
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color("BackgroundColor"))

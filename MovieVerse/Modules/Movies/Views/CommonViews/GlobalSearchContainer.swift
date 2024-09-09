@@ -13,7 +13,7 @@ struct GlobalSearchContainer: View {
     
     var body: some View {
         if movies_Data.searchedMovies.isEmpty {
-            if movies_Data.movies.isEmpty{
+            if movies_Data.movies.isEmpty {
                 VStack{
                     Spacer()
                     NoMovieFoundView(message: "No movie Found",subMessage: "Please Search movie by a good title name")

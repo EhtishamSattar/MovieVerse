@@ -18,6 +18,7 @@ struct LocalSearchContainer: View {
     ]
     
     var body: some View {
+        
         LazyVGrid(
             columns: columns,
             alignment: .center,
@@ -33,6 +34,7 @@ struct LocalSearchContainer: View {
                     .font(.headline.weight(.bold))
                     .font(.largeTitle)
             }) {
+                if !movies_Data.localmovies.isEmpty {
                     ForEach(Array(movies_Data.localmovies.enumerated()), id: \.offset) { index, movie in
                         NavigationLink(destination: MovieDetailsView(movies_Data: movies_Data, movie: movie)) {
                             MovieCard(
@@ -44,11 +46,16 @@ struct LocalSearchContainer: View {
                                 count: $movies_Data.count
                             )
                         }
+                        
+                    }
+                }
+                else {
+                    
+                    NoMovieFoundView(message: "No such Movie Found in Locals", subMessage: "")
                     
                 }
-                .frame(maxWidth: .infinity)
-                
             }
+            .frame(maxWidth: .infinity)
         }
         .frame(maxHeight: .infinity)
     }
