@@ -39,6 +39,7 @@
 		04B92C2A2C903A21008724C9 /* UpComingMoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B92C292C903A21008724C9 /* UpComingMoviesView.swift */; };
 		04B92C2C2C903AD8008724C9 /* RecentlyViewedMoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B92C2B2C903AD8008724C9 /* RecentlyViewedMoviesView.swift */; };
 		04B92C2E2C903C06008724C9 /* SearchMoviesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B92C2D2C903C06008724C9 /* SearchMoviesView.swift */; };
+		04B92C312C908289008724C9 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04B92C302C908289008724C9 /* Search.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		04B92C292C903A21008724C9 /* UpComingMoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpComingMoviesView.swift; sourceTree = "<group>"; };
 		04B92C2B2C903AD8008724C9 /* RecentlyViewedMoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyViewedMoviesView.swift; sourceTree = "<group>"; };
 		04B92C2D2C903C06008724C9 /* SearchMoviesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchMoviesView.swift; sourceTree = "<group>"; };
+		04B92C302C908289008724C9 /* Search.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 		049CCE992C859905001AA1C8 /* MovieVerse */ = {
 			isa = PBXGroup;
 			children = (
+				04B92C2F2C908270008724C9 /* ServiceLayer */,
 				04B92C072C8EDA2F008724C9 /* Constants */,
 				049CCEC12C85E9B5001AA1C8 /* NetworkLayer */,
 				049CCEC02C85E996001AA1C8 /* CoreDataManager */,
@@ -263,6 +266,14 @@
 			path = NetworkError;
 			sourceTree = "<group>";
 		};
+		04B92C2F2C908270008724C9 /* ServiceLayer */ = {
+			isa = PBXGroup;
+			children = (
+				04B92C302C908289008724C9 /* Search.swift */,
+			);
+			path = ServiceLayer;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -348,6 +359,7 @@
 				04B92C1F2C8EDA6E008724C9 /* RecentlyViewedView.swift in Sources */,
 				04B92C2C2C903AD8008724C9 /* RecentlyViewedMoviesView.swift in Sources */,
 				04B92C082C8EDA2F008724C9 /* constants.swift in Sources */,
+				04B92C312C908289008724C9 /* Search.swift in Sources */,
 				049CCEB32C85A88B001AA1C8 /* SearchField.swift in Sources */,
 				04B92C2A2C903A21008724C9 /* UpComingMoviesView.swift in Sources */,
 				04B92C2E2C903C06008724C9 /* SearchMoviesView.swift in Sources */,

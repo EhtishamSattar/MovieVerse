@@ -16,11 +16,9 @@ class BaseApi {
     var api_Url = Constants.baseApiUrl
     var searchApi_Url = Constants.baseSearchApiUrl
     var upComingMoviesUrl = Constants.upComingMoviesUrl
-    
-    func getMoviesData(pageNumber : Int) async throws -> MoviesData? {
-        
-        api_Url = api_Url + "&page=\(pageNumber)"
-        
+
+    // General Fetch Function
+    func fetchMovies(pageNumber : Int, api_Url: String) async throws -> MoviesData? {
         
         guard let api_Url = URL(string: api_Url) else {
             throw NetworkError.badUrl
@@ -49,6 +47,18 @@ class BaseApi {
             throw NetworkError.badServerResponse
             
         }
+        
+    }
+     
+    func getMoviesData(pageNumber : Int) async throws -> MoviesData? {
+        
+        api_Url = api_Url + "&page=\(pageNumber)"
+        do {
+            return try await fetchMovies(pageNumber: pageNumber, api_Url: api_Url)
+        } catch {
+            print(error)
+        }
+        return nil
     
     }
     
@@ -57,63 +67,25 @@ class BaseApi {
         
         searchApi_Url = searchApi_Url + "&query=\(name)&page=\(pageNumber)"
         
-        guard let searchApi_Url = URL(string: searchApi_Url ) else {
-            throw NetworkError.badUrl
-        }
-        
-        do{
-            
-            let (data, response) = try await URLSession.shared.data(from: searchApi_Url)
-            print(response)
-            
-            guard let httpUrlResponse = response as? HTTPURLResponse , httpUrlResponse.statusCode == 200 else {
-                throw NetworkError.badServerResponse
-            }
-            
-            if data.isEmpty {
-                throw NetworkError.badDataResonse
-            }
-            
-            let moviesData = try JSONDecoder().decode(MoviesData.self, from: data)
-            return moviesData
-            
+        do {
+            return try await fetchMovies(pageNumber: pageNumber, api_Url: searchApi_Url)
         } catch {
-            
             print(error)
-            throw NetworkError.badServerResponse
         }
+        return nil
         
     }
     
-    
+    // fetching upcoming movies
     func fetchUpcomingMovies(pageNumber: Int) async throws -> MoviesData? {
         
-        let urlString = upComingMoviesUrl + "&page=\(pageNumber)"
-        
-        guard let upComingMoviesUrl = URL(string: urlString) else {
-            throw NetworkError.badUrl
-        }
+        upComingMoviesUrl = upComingMoviesUrl + "&page=\(pageNumber)"
         
         do {
-            
-            let (data, response) = try await URLSession.shared.data(from: upComingMoviesUrl)
-            
-            /// as? is a type casting operator in Swift used for conditional type casting. return nil if there is possibility of casting failure
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                throw NetworkError.badServerResponse
-            }
-            
-            if data.isEmpty {
-                throw NetworkError.badDataResonse
-            }
-            
-            let moviesData = try JSONDecoder().decode(MoviesData.self, from: data)
-            return moviesData
-            
+            return try await fetchMovies(pageNumber: pageNumber, api_Url: upComingMoviesUrl)
         } catch {
-            
-            print("Error fetching movies: \(error.localizedDescription)")
-            throw error
+            print(error)
         }
+        return nil
     }
 }

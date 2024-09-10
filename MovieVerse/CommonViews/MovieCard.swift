@@ -58,22 +58,13 @@ struct MovieCard: View {
     }
 }
 
+
 //#Preview {
 //    MovieCard(
+//        movies_Data : MoviesViewModel(),
 //        movieImage: URL(string: "https://picsum.photos/300"),
 //        title: "Inception",
 //        description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
-//        rating: 4.5
+//        rating: 4.5, count: Binding.constant(0)
 //    )
 //}
-
-
-#Preview {
-    MovieCard(
-        movies_Data : MoviesViewModel(),
-        movieImage: URL(string: "https://picsum.photos/300"),
-        title: "Inception",
-        description: "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
-        rating: 4.5, count: Binding.constant(0)
-    )
-}

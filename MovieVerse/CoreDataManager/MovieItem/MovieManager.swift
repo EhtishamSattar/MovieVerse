@@ -80,8 +80,7 @@ class MovieManager: ObservableObject {
     // it is working
     func getMoviesDataInRange(startDate: String, endDate: String) -> [MovieItem] {
         let fetchRequest: NSFetchRequest<MovieItem> = MovieItem.fetchRequest()
-        print("--->>>",startDate)
-        print("--->>>",endDate)
+        
         fetchRequest.predicate = NSPredicate(format: "release_date >= %@ AND release_date <= %@", startDate, endDate)
         
         do {
@@ -93,8 +92,6 @@ class MovieManager: ObservableObject {
         }
         return []
     }
-    
-    
     
     
 }
