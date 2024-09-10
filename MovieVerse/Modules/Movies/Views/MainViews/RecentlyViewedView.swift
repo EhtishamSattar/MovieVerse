@@ -29,21 +29,8 @@ struct RecentlyViewedView: View {
                     }
                     Spacer()
                 }else {
-                    ScrollView(showsIndicators: false){
-                        ForEach(Array(movies_Data.recentlyViewedMovies.enumerated()), id: \.offset) { index,movieItem in
-                            
-                            NavigationLink {
-                                MovieDetailsView(movies_Data: movies_Data, movie: movieItem)
-                            } label: {
-                                LSMovieCard(movies_Data: movies_Data,movie: movieItem, index: index)
-                                    .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
-                                    .padding(.vertical)
-                            }
-
-                            
-                        }
-                        
-                    }
+                    
+                    RecentlyViewedMoviesView(movies_Data: movies_Data)
                 }
             }
             .frame(maxHeight: .infinity)

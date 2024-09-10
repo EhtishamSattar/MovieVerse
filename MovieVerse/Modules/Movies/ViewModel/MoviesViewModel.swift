@@ -39,6 +39,9 @@ class MoviesViewModel : ObservableObject {
     @Published var localSearchValue = ""
     @Published var debouncedLocalSearchValue = ""
     
+    // Range of Dates
+    @Published var startDate = Date()
+    @Published var endDate = Date()
     
     // Singleton Class shared instance
     let shared = BaseApi.shared
@@ -47,6 +50,9 @@ class MoviesViewModel : ObservableObject {
     
     // Error message
     @Published var apiErrorMessage : String = ""
+    
+    //IN date range Movies
+    @Published var dateRangeMovies : [MovieItem] = []
     
     // Initializing Data
     init() {
@@ -275,12 +281,13 @@ class MoviesViewModel : ObservableObject {
         if !movieName.isEmpty {
             localmovies.removeAll()
         
+            
             for movie in movies {
                 
-                if let title = movie.title, title.contains(movieName) {
+                if let title = movie.title?.lowercased(), title.contains(movieName.lowercased()) {
                     print("Appending movies")
                     localmovies.append(movie)
-                } else if let originalTitle = movie.original_title, originalTitle.contains(movieName) {
+                } else if let originalTitle = movie.original_title?.lowercased(), originalTitle.contains(movieName.lowercased()) {
                     print("Appending movies")
                     localmovies.append(movie)
                 }
@@ -318,4 +325,22 @@ class MoviesViewModel : ObservableObject {
             }
         }
     
+    
+    func getMoviesDataInDateRange() {
+        
+        let start = convertDateToString(date: self.startDate)
+        let end = convertDateToString(date: self.endDate)
+        
+        dateRangeMovies = movieManager.getMoviesDataInRange(startDate: start, endDate: end)
+        print("hehehe",dateRangeMovies)
+        
+        
+    }
+    
+    func convertDateToString(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd" // Desired format: YYYY-MM-DD
+        let dateString = dateFormatter.string(from: date)
+        return dateString
+    }
 }

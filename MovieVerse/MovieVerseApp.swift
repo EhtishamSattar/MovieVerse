@@ -41,6 +41,11 @@ struct MovieVerseApp: App {
         
         UINavigationBar.appearance().standardAppearance = Navappearance
         UINavigationBar.appearance().scrollEdgeAppearance = Navappearance
+        
+        // ScrollView Customization
+        UIScrollView.appearance().indicatorStyle = .white
+        UIScrollView.appearance().showsVerticalScrollIndicator = true
+        UIScrollView.appearance().verticalScrollIndicatorInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
     }
 
     

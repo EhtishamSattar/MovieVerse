@@ -13,6 +13,17 @@ struct GlobalSearchContainer: View {
     
     var body: some View {
         if movies_Data.searchedMovies.isEmpty {
+            if movies_Data.searchValue.isEmpty {
+                Text("Please search for a movie")
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.green)
+            }else {
+                Text("No related movies to your search")
+                    .frame(maxWidth: .infinity)
+                    .foregroundColor(.red)
+            }
+            
+            
             if movies_Data.movies.isEmpty {
                 VStack{
                     Spacer()
@@ -22,6 +33,11 @@ struct GlobalSearchContainer: View {
                 
             }else{
                 LazyVStack{
+                    Text("Look at these movies")
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .foregroundColor(.blue)
+                        .font(.caption)
+                        .padding(.horizontal)
                     ForEach(Array(movies_Data.movies.enumerated()), id: \.offset){ index, movie in
                         LSMovieCard(movies_Data: movies_Data,movie: movie, index: index)
                             .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
@@ -32,13 +48,8 @@ struct GlobalSearchContainer: View {
             }
         }
         else{
-            LazyVStack{
-                ForEach(Array(movies_Data.searchedMovies.enumerated()), id: \.offset){ index, movie in
-                    LSMovieCard(movies_Data: movies_Data,movie: movie, index: index)
-                        .frame(maxWidth: .infinity, maxHeight: 300,alignment: .center)
-                        .padding()
-                }
-            }
+            
+            SearchMoviesView(movies_Data: movies_Data)
         }
     }
 }

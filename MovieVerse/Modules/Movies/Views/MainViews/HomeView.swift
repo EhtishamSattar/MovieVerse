@@ -10,10 +10,7 @@ import SwiftUI
 struct HomeView: View {
    
     @ObservedObject var movies_Data : MoviesViewModel
-    //@State var count = 0
-    //var imageUrl : URL?
     
-    //let url = URL(string: "https://picsum.photos/300")
     var body: some View {
         NavigationView{
             if movies_Data.apiErrorMessage != "" {
@@ -33,7 +30,6 @@ struct HomeView: View {
                         NoMovieFoundView(message: "No Movie Found", subMessage: "Check you Internet Connection")
                         Spacer()
                     }else {
-                        
                         ScrollView(.vertical, showsIndicators: false) {
                             Text("Upcoming Movies")
                                 .padding(.horizontal, 10)
@@ -45,20 +41,9 @@ struct HomeView: View {
                                 .font(.largeTitle)
                             
                             // Upcoming movie Container
-                            ScrollView(.horizontal, showsIndicators: false) {
-                                LazyHStack {
-                                    ForEach(Array(movies_Data.upComingMovies.enumerated()), id: \.offset) { index, movie in
-                                        MovieCardScrollable(movies_Data: movies_Data, index: index, movie: movie)
-                                    }
-                                }
-                                .padding(30)
-                                .background(Color("BackgroundColor"))
-                                .frame(maxHeight: 300)
-                                
-                            }
-                            //.padding(.vertical, 8)
-                            .frame(maxWidth: .infinity, maxHeight: 720)
+                            UpComingMoviesView(movies_Data: movies_Data)
                             
+                            // Local movies
                             LocalSearchContainer(movies_Data: movies_Data)
                                 .frame(maxWidth: .infinity)
                             

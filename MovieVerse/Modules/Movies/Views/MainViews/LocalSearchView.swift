@@ -33,18 +33,10 @@ struct LocalSearchView: View {
                     .frame(maxWidth: .infinity,maxHeight: .infinity)
                 Spacer()
             }
-            
-            
-            //        .onAppear(perform: {
-            //            movies_Data.getRecentlyViewedData()
-            //        })
-            //.frame(maxWidth: .infinity,maxHeight: .infinity)
-            
-            
         }
-        .onAppear(perform: {
-            print("---------------",movies_Data.apiErrorMessage.count)
-        })
+//        .onAppear(perform: {
+//            print("---------------",movies_Data.apiErrorMessage.count)
+//        })
     }
 }
 
