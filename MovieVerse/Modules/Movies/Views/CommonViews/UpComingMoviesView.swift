@@ -13,7 +13,12 @@ struct UpComingMoviesView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHStack {
                 ForEach(Array(movies_Data.upComingMovies.enumerated()), id: \.offset) { index, movie in
-                    MovieCardScrollable(movies_Data: movies_Data, index: index, movie: movie)
+                    NavigationLink {
+                        MovieDetailsView(movies_Data: movies_Data, movie: movie)
+                    } label: {
+                        MovieCardScrollable(movies_Data: movies_Data, index: index, movie: movie)
+                    }
+
                 }
             }
             .padding(30)

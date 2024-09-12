@@ -72,6 +72,7 @@ struct DateRangedMoviesView: View {
                     
                     Text("Please select a valid date range")
                         .foregroundColor(.white)
+                        .font(.subheadline)
                     
                 }
             }
