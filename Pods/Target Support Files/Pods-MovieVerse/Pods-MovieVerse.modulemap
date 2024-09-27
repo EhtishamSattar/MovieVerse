@@ -1,0 +1,6 @@
+framework module Pods_MovieVerse {
+  umbrella header "Pods-MovieVerse-umbrella.h"
+
+  export *
+  module * { export * }
+}

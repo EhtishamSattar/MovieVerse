@@ -18,8 +18,10 @@ struct Constants {
     
     
     static let baseSearchApiUrl = "https://api.themoviedb.org/3/search/movie?api_key=2869a4ca70a9ba43c2c594b9310f0c75"
+    
     static let ImageUrl = "https://image.tmdb.org/t/p/w500/"
-    static let upComingMoviesUrl = "https://api.themoviedb.org/3/movie/upcoming?api_key=e5ea3092880f4f3c25fbc537e9b37dc1"
+    
+    static let upComingMoviesUrl = "https://api.themoviedb.org/3/movie/upcoming"//?api_key=e5ea3092880f4f3c25fbc537e9b37dc1"
     
     
     enum Image {
